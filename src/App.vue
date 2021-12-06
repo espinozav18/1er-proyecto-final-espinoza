@@ -1,28 +1,48 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <Menu :titulo="nombreTienda"  :cantItem="cantItems" />
+    <Carrusel />
+    <v-main>
+      <v-container>
+        <v-row class="mt-12">
+          <v-col>
+            <CardsContainer :productos="listProductos"  />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+    <Footer :titulo="nombreTienda" />
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import listaProd from "./assets/json/productos.json";
+import Menu from "./components/Menu.vue";
+import Footer from "./components/Footer.vue";
+import Carrusel from "./components/Carrusel.vue";
+import CardsContainer from "./components/CardsContainer.vue";
 
 export default {
-  name: 'App',
+  name: "App",
+
   components: {
-    HelloWorld
-  }
-}
+    Menu,
+    Footer,
+    Carrusel,
+    CardsContainer,
+  },
+
+  data: () => ({
+    nombreTienda: "Tienda Store",
+    listProductos: listaProd,
+    cantItems:0,
+  }),
+  
+  methods: {
+
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss" scoped>
 </style>
