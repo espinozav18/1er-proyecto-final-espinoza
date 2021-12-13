@@ -1,6 +1,6 @@
 <template>
   <v-row justify="space-around">
-    <v-col cols="auto">
+    <v-col cols="auto" >
       <v-dialog transition="dialog-top-transition" width="800">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="info" v-bind="attrs" v-on="on"
@@ -8,7 +8,7 @@
           >
         </template>
         <template v-slot:default="dialog">
-          <v-card>
+          <v-card class="alinear">
             <v-toolbar color="primary" dark>{{ producto.nombre }}</v-toolbar>
             <v-card-text>
               <v-row class="pa-4">
@@ -17,9 +17,9 @@
                     <v-carousel-item
                       v-for="(item, i) in producto.imagenes"
                       :key="i"
-                      :src="require('../assets/img/' + item)"
+                      :src="item"
                     ></v-carousel-item> </v-carousel
-                ></v-col>
+                ></v-col><!--:src="require('../assets/img/' + item)"-->
                 <v-col sm="6">
                   <v-list-item>
                     <v-list-item-content>
@@ -83,4 +83,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.alinear{
+ text-align: left;
+}
 </style>

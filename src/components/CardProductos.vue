@@ -1,11 +1,11 @@
 
 <template>
-  <v-card hover max-height="520" min-height="520">
+  <v-card hover max-height="520" min-height="520" class="alinear">
     <v-card-title>
       <v-img
         height="250"
         width="200px"
-        :src="require('../assets/img/' + producto.imagenes[0])"
+        :src="producto.imagenes[0]"
       />
       {{ producto.nombre }}
     </v-card-title>
@@ -16,7 +16,7 @@
       
     </v-card-text>
     <v-card-actions>
-      <BotonComprar  :producto="producto" />
+      <BotonComprar    :producto="producto" />
       <v-spacer></v-spacer>
       <DetalleProduco :producto="producto" />
     </v-card-actions>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import DetalleProduco from "./DetalleProdcuto.vue"
+import DetalleProduco from "./DetalleProducto.vue"
 import BotonComprar from "./BotonComprar.vue"
 export default {
   components:{
@@ -43,4 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.alinear{
+ text-align: left;
+}
 </style>

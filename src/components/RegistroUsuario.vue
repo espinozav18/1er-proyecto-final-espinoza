@@ -6,35 +6,37 @@
         <v-row>
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="nombre"
-              :rules="[() => !!nombre || 'Ingrese Nombres']"
+              v-model="usuario.nombre"
+              :rules="[(v) => !!v || 'Ingrese Nombres']"
               label="Nombre"
               required
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="apellidos"
-              :rules="[() => !!apellidos || 'Ingrese Apellidos']"
+              v-model="usuario.apellidos"
+              :rules="[(v) => !!v || 'Ingrese Apellidos']"
               label="Apellidos"
               required
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="fechanacimiento"
+              v-model="usuario.fechanacimiento"
               :type="'date'"
-              :rules="[() => !!fechanacimiento || 'Fecha de nacimiento']"
+              :rules="[(v) => !!v || 'Fecha de nacimiento']"
               label="Fecha de nacimiento"
               required
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="dni"
+              v-model="usuario.dni"
               :type="'number'"
-              :rules="[() => !!dni || 'Ingrese dni',
-              () => (dni.length!=8) || 'Dni debe tener 8 digitos']"
+              :rules="[
+                (d) => !!d || 'Ingrese dni',
+                (d) =>  /\d{8}/.test(d) || 'Dni debe tener 8 digitos',
+              ]"
               label="Dni"
               required
             ></v-text-field>
@@ -42,20 +44,16 @@
         </v-row>
 
         <v-text-field
-          v-model="direccion"
-          :rules="[
-            () => !!direccion || 'Ingrese dirección',
-          ]"
+          v-model="usuario.direccion"
+          :rules="[(v) => !!v || 'Ingrese dirección']"
           label="Dirección"
           required
         ></v-text-field>
         <v-text-field
-          v-model="email"
+          v-model="usuario.usuario"
           :rules="[
             (v) => !!v || 'Ingrese e-mail',
-            (v) =>
-              /.+@.+\..+/.test(v) ||
-              'direccion de correo invalida',
+            (v) => /.+@.+\..+/.test(v) || 'direccion de correo invalida',
           ]"
           label="Email"
           required
@@ -63,7 +61,7 @@
         <v-row>
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="password"
+              v-model="usuario.password"
               maxlength="16"
               :type="'password'"
               :rules="[
@@ -78,21 +76,25 @@
           </v-col>
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="password2"
+              v-model="usuario.password2"
               maxlength="16"
               :type="'password'"
               :rules="[
                 (v) => !!v || 'Ingrese contraseña',
-                (v) => v === password || 'Contrase es diferente',
+                (v) => v === usuario.password || 'Contrase es diferente',
               ]"
               label="repetir contraseña"
               required
             ></v-text-field>
           </v-col>
+          <v-alert v-if="mensaje !== ''" dense outlined type="error">
+            {{ mensaje }}
+          </v-alert>
         </v-row>
       </v-form>
+      
     </v-card-text>
-    <v-divider class="mt-12"></v-divider>
+ 
     <v-card-actions>
       <v-btn color="error" @click="ocultarDialog(0)"> Cancelar </v-btn>
       <v-spacer></v-spacer>
@@ -102,28 +104,48 @@
 </template>
 
 <script>
+const axios = require("axios");
 export default {
   data() {
     return {
-      nombre: "",
-      apellidos: "",
-      fechanacimiento: "",
-      dni: "",
-      direccion: "",
-      email: "",
-      password: "",
-      password2: "",
+      usuario: {
+        nombre: "",
+        apellidos: "",
+        fechanacimiento: "",
+        dni: "",
+        direccion: "",
+        usuario: "",
+        password: "",
+        password2: "",
+      },
       valid: true,
+      mensaje:''
     };
   },
   methods: {
-    ocultarDialog(param) {
+    async ocultarDialog(param) {
       if (param == 0) {
-          this.$emit("cerrarDialog", {"registroUsuario":false,"dialog":false});
+        this.$emit("cerrarDialog", { registroUsuario: false, dialog: false });
       } else {
         const validar = this.$refs.form.validate();
         if (validar) {
-          this.$emit("cerrarDialog", {"registroUsuario":false,"dialog":true});
+          await axios
+            .post(
+              `https://61b75f4e64e4a10017d18ae0.mockapi.io/usuarios`,
+              this.usuario
+            )
+            .then((rpta) => {
+              console.info(rpta);
+              if (rpta.status == 201 ||rpta.status == 200) {
+                this.$emit("cerrarDialog", {
+                  registroUsuario: false,
+                  dialog: true,
+                  usuario:this.usuario.usuario
+                });
+              } else {
+                this.mensaje = "Usuario no encontrado";
+              }
+            }).catch(error => { this.mensaje = error.response.status + ": " + error.message;  });
         }
       }
     },
@@ -131,8 +153,8 @@ export default {
       this.$refs.form.validate();
 
       /* if (validar) {
-          
-      }*/
+
+            }*/
     },
     reset() {
       this.$refs.form.reset();

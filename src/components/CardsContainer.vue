@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="alinear">
     <h2>Listado de productos</h2>
     <v-row>
       <v-col v-for="(prod, i) in productos" :key="i">
@@ -24,4 +24,7 @@ CardProductos
 </script>
 
 <style lang="scss" scoped>
+.alinear{
+ text-align: left;
+}
 </style>

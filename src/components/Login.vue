@@ -1,12 +1,26 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn icon v-bind="attrs" v-on="on" @click="mensaje = '',registroUsuario=false" v-show="login">
+      <v-btn
+        icon
+        v-bind="attrs"
+        v-on="on"
+        @click="
+          (mensaje = ''), (registroUsuario = false), (mensajeRegistro = '')
+        "
+        v-show="login"
+      >
         <v-icon>mdi-account</v-icon>
       </v-btn>
+      <!--<router-link to="/login"> <v-icon>mdi-account</v-icon></router-link> -->
       <v-list color="bar-fondo" v-show="login">
-        <v-list-item class="bgsel" link>
-          <v-list-item-title v-bind="attrs" v-on="on" @click="mensaje = '',registroUsuario=true">Registrar</v-list-item-title>
+        <v-list-item class="bgsel">
+          <v-list-item-title
+            v-bind="attrs"
+            v-on="on"
+            @click="(mensaje = ''), (registroUsuario = true)"
+            >Registrar</v-list-item-title
+          >
         </v-list-item>
       </v-list>
       <v-menu offset-y>
@@ -20,27 +34,35 @@
             v-on="on"
           >
             <v-list-item-title to="/" class="flm"
-              ><v-icon>mdi-account-cog</v-icon> Juan</v-list-item-title
+              ><v-icon>mdi-account-cog</v-icon>
+              {{ usuario.usuario }}</v-list-item-title
             >
           </v-btn>
         </template>
         <v-list>
-          <v-list-item
-            v-for="(item, index) in items"
-            :key="index"
-            class="bgsel"
-            link
-          >
-            <v-list-item-title @click="login = true">{{
-              item.title
-            }}</v-list-item-title>
+          <v-list-item class="bgsel" link>
+            <router-link
+              :to="`/edituser/` + usuario.id"
+              class="flm"
+              color="bar-fondo"
+              >Editar datos</router-link
+            >
+          </v-list-item>
+          <v-list-item class="bgsel" @click="login = true">
+            <router-link :to="'/'" color="bar-fondo" 
+              >Cerrar Sessión</router-link
+            >
+            <!--<v-list-item-title  :to="'/'" class="text-lg-left" @click="(login = true);"
+              >Cerrar Sessión</v-list-item-title
+            >-->
           </v-list-item>
         </v-list>
       </v-menu>
     </template>
     <v-card v-if="!registroUsuario">
-      <v-card-title class="text-h5"> Iniciar Sessión </v-card-title>
-      <v-card-text>
+      <v-toolbar color="primary" dark>Iniciar Sessión</v-toolbar>
+
+      <v-card-text class="pt-2">
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-model="email"
@@ -59,6 +81,9 @@
           <v-alert v-if="mensaje !== ''" dense outlined type="error">
             {{ mensaje }}
           </v-alert>
+          <v-alert v-if="mensajeRegistro !== ''" dense outlined type="success">
+            {{ mensajeRegistro }}
+          </v-alert>
         </v-form>
       </v-card-text>
       <v-card-actions offset-y>
@@ -76,29 +101,33 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <registroUsuario @cerrarDialog="cerrarDialogs($event)" v-else/>
+    <registroUsuario @cerrarDialog="cerrarDialogs($event)" v-else />
   </v-dialog>
 </template>
 
 <script>
-import usuarios from "../assets/json/usuario.json";
+//import usuarios from "../assets/json/usuario.json";
 import registroUsuario from "./RegistroUsuario.vue";
+
+const axios = require("axios");
 export default {
   components: {
     registroUsuario,
-    
   },
   /* props:{
     mensajes:{type:Boolean}
   },*/
   data: () => ({
-    usuario: usuarios,
-    items: [{ title: "Cerrar" }],
+    usuario: {},
+    //usuario: usuarios,
+    items: [{ title: "Cerrar Sesión" }],
     login: true,
     mensaje: "",
-    dialog: false,//mostra dialog
+    mensajeRegistro: "",
+    editar: false,
+    dialog: false, //mostra dialog
     valid: true,
-    registroUsuario:false,//mostrar formulario login
+    registroUsuario: false, //mostrar formulario login
     password: "Coders2021",
     passwordRules: [
       (v) => !!v || "Contraseña",
@@ -115,32 +144,44 @@ export default {
   }),
 
   methods: {
-    /*estadoLogin(){
-          this.$emit("estLogin",true);
-          //console.log("Entra al metodo");
-      },
-    */
     cerrarDialogs(param) {
-      this.registroUsuario=param.registroUsuario;
-      this.dialog=param.dialog;
-      
+      this.registroUsuario = param.registroUsuario;
+      this.dialog = param.dialog;
+      this.email = param.usuario;
+      this.password = "";
+      this.mensajeRegistro = "Usuario Se creo satisfactorimente";
     },
-    validate() {
+    async validate() {
       const validar = this.$refs.form.validate();
 
       if (validar) {
-        const validUsuario = this.usuario.find(
+        /*const validUsuario = this.usuario.find(
           (user) =>
             user.usuario === this.email && user.password === this.password
-        );
-        if (validUsuario !== undefined) {
-          this.dialog = false;
-          this.login = false;
-          //console.info(this.login);
-          //estadoLogin = this.estadoLoginM($event);
-        } else {
-          this.mensaje = "Usuario no encontrado";
-        }
+        );*/
+        let validUsuario = [];
+        await axios
+          .get(`https://61b75f4e64e4a10017d18ae0.mockapi.io/usuarios`, {})
+          .then((rpta) => {
+            if (rpta.status == 201 || rpta.status == 200) {
+              validUsuario = rpta.data.find(
+                (user) =>
+                  user.usuario === this.email && user.password === this.password
+              );
+
+              if (validUsuario != "" && validUsuario !== undefined) {
+                this.dialog = false;
+                this.login = false;
+                this.usuario = validUsuario;
+                this.mensajeRegistro = "";
+              } else {
+                this.mensaje = "Usuario no encontrado";
+              }
+            }
+          })
+          .catch((error) => {
+            this.mensaje = error.response.status + ": " + error.message;
+          });
       }
     },
     reset() {

@@ -22,15 +22,16 @@ export default {
 
   methods: {
     comprarItem(prod) {
-      this.$listaCarrito.push({
+      /*this.$listaCarrito.push({
         nombre: prod.nombre,
         marca: prod.marca,
         modelo: prod.modelo,
         precio: prod.precio,
         cantidad: 1,
         total: prod.precio * 1,
-      });
-      console.info(this.$listaCarrito);
+      });*/
+      
+      console.info(prod);
     },
   },
 };
