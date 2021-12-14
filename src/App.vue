@@ -1,24 +1,15 @@
 <template>
- <v-app>
- <Menu :titulo="nombreTienda" :cantItem="cantItems" />
-    
-    <!--<div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>-->
-    <router-view />
+  <v-app>
+    <Menu :titulo="nombreTienda" :cantItem="cantItems" />
+      <router-view />
     <Footer :titulo="nombreTienda" />
- </v-app>
-
-   
- 
+  </v-app>
 </template>
 
 <script>
-//import listaProd from "./assets/json/productos.json";
 import Menu from "./components/Menu.vue";
 import Footer from "./components/Footer.vue";
-//const axios = require("axios");
+
 export default {
   name: "Home",
   components: {
@@ -27,23 +18,10 @@ export default {
   },
   data: () => ({
     nombreTienda: "Tienda Store",
-    //listProductos: [],
     cantItems: 0,
   }),
-  mounted(){
-    //this.listaProductos();
-  },
-  methods:{
-   /* async listaProductos(){
-      await axios
-          .get(`https://61b75f4e64e4a10017d18ae0.mockapi.io/productos`, {})
-          .then((rpta) => {
-            if (rpta.status == 201 || rpta.status == 200) {
-              this.listProductos=rpta.data;
-            }
-          }).catch(error => { this.mensaje = error.response.status + ": " + error.message;  });
-    }*/
-  }
+  mounted() {},
+  methods: {},
 };
 </script>
 

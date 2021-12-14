@@ -11,14 +11,24 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
+    path: '/contacto',
+    name: 'Contacto',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
     path: '/edituser/:id',
     name: 'EditarUsuario',
-    component: () => import(/* webpackChunkName: "about" */ '../views/EditarUsuario.vue')
+    component: () => import('../views/EditarUsuario.vue')
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin/Dashboard.vue')
+  },
+  {
+    path: '/productos',
+    name: 'Productos',
+    component: () => import('../views/Admin/Productos.vue')
   },
 
 ]

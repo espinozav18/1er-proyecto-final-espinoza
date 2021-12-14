@@ -13,6 +13,7 @@
         <v-icon>mdi-account</v-icon>
       </v-btn>
       <!--<router-link to="/login"> <v-icon>mdi-account</v-icon></router-link> -->
+      
       <v-list color="bar-fondo" v-show="login">
         <v-list-item class="bgsel">
           <v-list-item-title
@@ -49,7 +50,7 @@
             >
           </v-list-item>
           <v-list-item class="bgsel" @click="login = true">
-            <router-link :to="'/'" color="bar-fondo" 
+            <router-link :to="'/'" color="bar-fondo"
               >Cerrar Sessión</router-link
             >
             <!--<v-list-item-title  :to="'/'" class="text-lg-left" @click="(login = true);"

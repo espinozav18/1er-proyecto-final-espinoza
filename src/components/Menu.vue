@@ -27,37 +27,32 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
+      <router-link
+        to="/"
         dark
-        class="text-capitalize mr-2 v-btn--active"
+        class="text-capitalize mr-2 v-btn--active flm"
         v-show="$vuetify.breakpoint.lgOnly"
         color="bar-fondo"
+        >Home</router-link
       >
-   
-        <router-link to="/" class="flm">Home</router-link>
-      </v-btn>
 
-      <!-- <v-btn
+      <router-link
         dark
+        to="/contacto"
         v-show="$vuetify.breakpoint.lgOnly"
-        class="text-capitalize"
+        class="text-capitalize mr-2 flm"
         color="bar-fondo"
+        >Contacto</router-link
       >
-        <v-list-item-title to="/productos" class="flm"
-          >Productos</v-list-item-title
-        >
-      </v-btn>-->
+       <router-link
+        dark
+        to="/admin"
+        v-show="$vuetify.breakpoint.lgOnly"
+        class="text-capitalize mr-14 flm"
+        color="bar-fondo"
+        >Admin</router-link
+      >
 
-      <v-btn
-        color="bar-fondo"
-        dark
-        class="text-capitalize mr-14"
-        v-show="$vuetify.breakpoint.lgOnly"
-      >
-        <router-link to="/about" class="flm" color="bar-fondo"
-          >Contacto</router-link
-        >
-      </v-btn>
       <Login />
       <Carrito :cantItem="cantItem" />
     </v-toolbar>
@@ -76,29 +71,15 @@
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
             <v-list-item-title>
-               <router-link to="/" class="flm">Home</router-link>
-             
+              <router-link to="/" class="flm">Home</router-link>
             </v-list-item-title>
           </v-list-item>
-
-          <!--<v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-store</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>
-              <v-list-item-title to="/productos" class="flm"
-                >productos</v-list-item-title
-              >
-            </v-list-item-title>
-          </v-list-item>-->
-
           <v-list-item>
             <v-list-item-icon>
               <v-icon>mdi-earth</v-icon>
             </v-list-item-icon>
             <v-list-item-title>
-       
-               <router-link to="/about" class="flm">Contacto</router-link>
+              <router-link to="/contacto" class="flm">Contacto</router-link>
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
