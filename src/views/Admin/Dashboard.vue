@@ -31,8 +31,7 @@ export default {
     return {
       items: [
         { title: "Productos", icon: "mdi-view-dashboard" },
-        { title: "Usuarios", icon: "mdi-account-multiple" },
-      
+        { title: "Usuarios", icon: "mdi-account-multiple" }, 
       ],
       right: null,
     };
