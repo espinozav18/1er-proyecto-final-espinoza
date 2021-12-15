@@ -30,7 +30,7 @@
       <router-link
         to="/"
         dark
-        class="text-capitalize mr-2 v-btn--active flm"
+        class="text-capitalize mr-2 v-btn--active flm" 
         v-show="$vuetify.breakpoint.lgOnly"
         color="bar-fondo"
         >Home</router-link
@@ -44,14 +44,7 @@
         color="bar-fondo"
         >Contacto</router-link
       >
-       <router-link
-        dark
-        to="/admin"
-        v-show="$vuetify.breakpoint.lgOnly"
-        class="text-capitalize mr-14 flm"
-        color="bar-fondo"
-        >Admin</router-link
-      >
+      
 
       <Login />
       <Carrito :cantItem="cantItem" />
@@ -80,6 +73,14 @@
             </v-list-item-icon>
             <v-list-item-title>
               <router-link to="/contacto" class="flm">Contacto</router-link>
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-earth</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              <router-link to="/productos" class="flm">Admin</router-link>
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>

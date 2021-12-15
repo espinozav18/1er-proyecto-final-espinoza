@@ -20,15 +20,16 @@ const routes = [
     name: 'EditarUsuario',
     component: () => import('../views/EditarUsuario.vue')
   },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: () => import('../views/Admin/Dashboard.vue')
-  },
+
   {
     path: '/productos',
     name: 'Productos',
     component: () => import('../views/Admin/Productos.vue')
+  },
+  {
+    path: '/pagar',
+    name: 'Pagar',
+    component: () => import('../views/Pagar.vue')
   },
 
 ]

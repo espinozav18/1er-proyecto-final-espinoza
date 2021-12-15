@@ -12,8 +12,17 @@
       >
         <v-icon>mdi-account</v-icon>
       </v-btn>
+      <router-link
+        dark
+        to="/productos"
+        v-show="$vuetify.breakpoint.lgOnly && admin"
+        class="text-capitalize mr-2 flm a-router"
+        color="bar-fondo"
+        >Admin</router-link
+      >
       <!--<router-link to="/login"> <v-icon>mdi-account</v-icon></router-link> -->
       
+
       <v-list color="bar-fondo" v-show="login">
         <v-list-item class="bgsel">
           <v-list-item-title
@@ -24,7 +33,8 @@
           >
         </v-list-item>
       </v-list>
-      <v-menu offset-y>
+     
+      <v-menu >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             v-show="login == false"
@@ -49,7 +59,7 @@
               >Editar datos</router-link
             >
           </v-list-item>
-          <v-list-item class="bgsel" @click="login = true">
+          <v-list-item class="bgsel" @click="(login = true), (admin = false)">
             <router-link :to="'/'" color="bar-fondo"
               >Cerrar Sessión</router-link
             >
@@ -123,6 +133,7 @@ export default {
     //usuario: usuarios,
     items: [{ title: "Cerrar Sesión" }],
     login: true,
+    admin: false,
     mensaje: "",
     mensajeRegistro: "",
     editar: false,
@@ -161,28 +172,37 @@ export default {
             user.usuario === this.email && user.password === this.password
         );*/
         let validUsuario = [];
-        await axios
-          .get(`https://61b75f4e64e4a10017d18ae0.mockapi.io/usuarios`, {})
-          .then((rpta) => {
-            if (rpta.status == 201 || rpta.status == 200) {
-              validUsuario = rpta.data.find(
-                (user) =>
-                  user.usuario === this.email && user.password === this.password
-              );
+        if (this.email === "admin@gmail.com" && this.password === "Admin2021") {
+          this.admin = true;
+          this.dialog = false;
+          this.login = false;
+          this.usuario = validUsuario;
+          this.mensajeRegistro = "";
+        } else {
+          await axios
+            .get(`https://61b75f4e64e4a10017d18ae0.mockapi.io/usuarios`, {})
+            .then((rpta) => {
+              if (rpta.status == 201 || rpta.status == 200) {
+                validUsuario = rpta.data.find(
+                  (user) =>
+                    user.usuario === this.email &&
+                    user.password === this.password
+                );
 
-              if (validUsuario != "" && validUsuario !== undefined) {
-                this.dialog = false;
-                this.login = false;
-                this.usuario = validUsuario;
-                this.mensajeRegistro = "";
-              } else {
-                this.mensaje = "Usuario no encontrado";
+                if (validUsuario != "" && validUsuario !== undefined) {
+                  this.dialog = false;
+                  this.login = false;
+                  this.usuario = validUsuario;
+                  this.mensajeRegistro = "";
+                } else {
+                  this.mensaje = "Usuario no encontrado";
+                }
               }
-            }
-          })
-          .catch((error) => {
-            this.mensaje = error.response.status + ": " + error.message;
-          });
+            })
+            .catch((error) => {
+              this.mensaje = error.response.status + ": " + error.message;
+            });
+        }
       }
     },
     reset() {
@@ -196,6 +216,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.a-router {
+  color: white;
+
+  text-decoration: none;
+}
 .bar-fondo {
   background-color: #3d5afe !important;
 }

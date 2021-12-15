@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="500">
+  <v-dialog v-model="dialog" persistent max-width="600">
     <template v-slot:activator="{ on, attrs }">
       <v-btn icon v-bind="attrs" v-on="on">
         <v-badge color="green" v-if="cantItem > 0" :content="cantItem">
@@ -8,33 +8,29 @@
         <v-icon v-else>mdi-cart</v-icon>
       </v-btn>
     </template>
+
     <v-card>
       <v-toolbar color="primary" dark>Lista de productos</v-toolbar>
-      <v-card-text>
-        <v-data-table 
-          :headers="carritoHeaders"
-          :items="carrito"
-          hide-default-footer
-          class="elevation-1,pa-4"
-        ><template v-slot:item.cantidad="{ item }">
-            <v-text-field
-            v-model="item.cantidad"
-            v-on:input="item.total=item.cantidad*item.precio"
-            label="cantidad"
-            required
-          ></v-text-field>
-  
-    </template></v-data-table>
+      <v-card-text class="pa-5">
+        <v-row>
+          <v-col cols="12" lg="12">
+            <ListaCarrito :listaProductos="carrito"/>
+          </v-col>
+          <v-col cols="12" lg="12">
+            <v-card>
+          <v-card-text class="px-0"><h3>Total compra: <span class="total-pagar">{{carrito.reduce((a, b) => a + b.total, 0) }}</span> </h3></v-card-text>
+        </v-card>
+
+            
+          </v-col>
+        </v-row>
       </v-card-text>
       <v-card-actions class="justify-end">
         <v-btn color="error" text @click="dialog = false">Cerrar</v-btn>
-        <v-btn
-         
-          color="success"
-          class="mr-4"
-         
-        >
-          Pagar
+        <v-btn color="success" class="mr-1" @click="dialog = false">
+          <router-link :to="'/pagar'" color="white" class="flm a-router"
+            >Continuar
+          </router-link>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -42,44 +38,56 @@
 </template>
 
 <script>
+import ListaCarrito from "./ListaCarrito.vue"
 export default {
+  components:{
+    ListaCarrito
+  },
   props: {
     listaProductos: Array,
     cantItem: Number,
   },
   data() {
     return {
-         dialog: false,//mostra dialog
-      carritoHeaders: [
-        { text: "Nombre ", value: "nombre" },
-        { text: "Marca ", value: "marca" },
-        { text: "Precio", value: "precio" },
-        { text: "Cantidad", value: "cantidad" },
-        { text: "Total", value: "total" },
-      ],
+      dialog: false, //mostra dialog
+      
       carrito: [
         {
+          nro: 1,
+          id: 15,
           nombre: "Teclado",
-          marca:"Logitech",
+          marca: "Logitech",
           precio: 150,
           cantidad: 3,
-          total:150*3
+          total: 150 * 3,
         },
         {
+          nro: 2,
+          id: 16,
           nombre: "Impresora",
-          marca:"Epson",
+          marca: "Epson",
           precio: 200,
           cantidad: 4,
-          total:200*4
+          total: 200 * 4,
         },
       ],
     };
   },
-  methods:{
-      
-  }
+
 };
 </script>
 
 <style lang="scss" scoped>
+.a-router {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+.total-pagar{
+  color: #D50000;
+  font-weight: bold;
+}
+.align-text{
+  text-align: end !important;
+}
 </style>

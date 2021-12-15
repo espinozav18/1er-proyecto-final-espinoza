@@ -10,8 +10,10 @@
       <v-col class="d-flex" cols="12" sm="9">
         <v-text-field
           v-model.trim="prodItem.nombre"
-          :rules="[(v) => !!v || 'Nombre es requerido']"
+          :rules="[(v) => !!v || 'Nombre es requerido',
+          (v) => v && v.length <= 50 || 'nombre solo 50 caracteres']"
           label="Nombre del producto"
+          :counter="50"
           required
         ></v-text-field>
       </v-col>

@@ -1,22 +1,29 @@
-
 <template>
-  <v-card hover max-height="520" min-height="520" class="alinear">
+  <v-card hover class="alinear mx-auto">
+    
+    <v-img :src="producto.imagenes[0]" />
     <v-card-title>
-      <v-img
-        height="250"
-        width="200px"
-        :src="producto.imagenes[0]"
-      />
-      {{ producto.nombre }}
+      <h5>{{ producto.nombre }}</h5>
     </v-card-title>
 
-    <v-card-text>
-      <p>Precio: <strong>{{ producto.moneda }} {{ producto.precio |decimal2}}</strong></p>
-      <p>Cantidad: {{ producto.stock }}</p>
-      
-    </v-card-text>
+    <v-card-subtitle>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title
+            >Precio:
+            <strong
+              >{{ producto.moneda }} {{ producto.precio | decimal2 }}</strong
+            ></v-list-item-title
+          >
+          <v-list-item-subtitle
+            >Cantidad: {{ producto.stock }}</v-list-item-subtitle
+          >
+        </v-list-item-content>
+      </v-list-item>
+    </v-card-subtitle>
+
     <v-card-actions>
-      <BotonComprar    :producto="producto" />
+      <BotonComprar :producto="producto" />
       <v-spacer></v-spacer>
       <DetalleProduco :producto="producto" />
     </v-card-actions>
@@ -24,26 +31,37 @@
 </template>
 
 <script>
-import DetalleProduco from "./DetalleProducto.vue"
-import BotonComprar from "./BotonComprar.vue"
+import DetalleProduco from "./DetalleProducto.vue";
+import BotonComprar from "./BotonComprar.vue";
 export default {
-  components:{
+  components: {
     DetalleProduco,
-    BotonComprar
+    BotonComprar,
   },
   props: {
     producto: Object,
   },
-  filters:{
-    decimal2(value){
-      return value.toFixed(2)
-    }
-  }
+  data() {
+    return {
+      attrs: {
+        class: "mb-6",
+        boilerplate: true,
+        elevation: 2,
+        loading: true,
+        firstLoad: true,
+      },
+    };
+  },
+  filters: {
+    decimal2(value) {
+      return value.toFixed(2);
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.alinear{
- text-align: left;
+.alinear {
+  text-align: left;
 }
 </style>

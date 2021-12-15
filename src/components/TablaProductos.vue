@@ -1,22 +1,25 @@
 <template>
   <div>
-   <v-alert v-if="mensaje !== ''" dense outlined type="error">
+    <v-alert v-if="mensaje !== ''" dense outlined type="error">
       {{ mensaje }}
     </v-alert>
     <v-alert v-if="mensajeRegistro !== ''" dense outlined type="success">
       {{ mensajeRegistro }}
     </v-alert>
     <v-card-title>
+     
       <v-text-field
-      v-model="buscar"
-      append-icon="mdi-magnify"
-      label="Buscar"
-      single-line
-      hide-details
-    ></v-text-field>
-    <v-btn @click="listaProductos" color="blue" text><v-icon>mdi-update</v-icon>Actualizar</v-btn>
+        v-model="buscar"
+        append-icon="mdi-magnify"
+        label="Buscar"
+        single-line
+        hide-details
+      ></v-text-field>
+      <v-btn @click="listaProductos" color="blue" text
+        ><v-icon>mdi-update</v-icon>Actualizar</v-btn
+      >
     </v-card-title>
-    
+
     <v-data-table
       :headers="headers"
       :items="productItems"
@@ -36,8 +39,8 @@
       </template>
 
       <template v-slot:item.acciones="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon medium color="warning" class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon medium color="error" @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
     <template>
@@ -66,10 +69,8 @@
           >
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="closeDelete"
-              >no</v-btn
-            >
-            <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+            <v-btn color="error darken-1" @click="closeDelete">no</v-btn>
+            <v-btn color="success darken-1" @click="deleteItemConfirm"
               >si</v-btn
             >
             <v-spacer></v-spacer>
@@ -115,18 +116,16 @@ export default {
           filterable: false,
         },
       ],
-      productItems:[],
-      mensaje:"",
-      mensajeRegistro:"",
+      productItems: [],
+      mensaje: "",
+      mensajeRegistro: "",
       pItem: {},
-      idDelete:0,
+      idDelete: 0,
       dialog: false,
       dialogDelete: false,
     };
   },
-  computed: {
-   
-  },
+  computed: {},
 
   watch: {
     dialog(val) {
@@ -145,11 +144,12 @@ export default {
       else return "red";
     },
     cargarDatos() {
-      
       this.listaProductos();
     },
     async listaProductos() {
-      this.productItems=[];
+      this.mensaje = "";
+      this.mensajeRegistro = "";
+      this.productItems = [];
       await axios
         .get(`https://61b75f4e64e4a10017d18ae0.mockapi.io/productos`, {})
         .then((rpta) => {
@@ -158,7 +158,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.mensaje=error.response.status + ": " + error.message;
+          this.mensaje = error.response.status + ": " + error.message;
         });
     },
     editItem(item) {
@@ -167,42 +167,40 @@ export default {
     },
 
     deleteItem(item) {
-      this.idDelete=item.id;
+      this.idDelete = item.id;
       /*this.editedIndex = this.productItems.indexOf(item);
       this.editedItem = Object.assign({}, item);*/
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-       axios
-          .delete(
-            `https://61b75f4e64e4a10017d18ae0.mockapi.io/productos/${this.idDelete}`,
-            {}
-          )
-          .then((rpta) => {
-            if (rpta.status == 201 || rpta.status == 200) {
-              this.idDelete=0;
-              this.listaProductos();
-              this.mensaje = "";
-              this.mensajeRegistro = "Se Elimino satisfactoriamente";
-            } 
-          })
-          .catch((error) => {
-             this.mensaje=error.response.status + ": " + error.message;
-          });
+      axios
+        .delete(
+          `https://61b75f4e64e4a10017d18ae0.mockapi.io/productos/${this.idDelete}`,
+          {}
+        )
+        .then((rpta) => {
+          if (rpta.status == 201 || rpta.status == 200) {
+            this.idDelete = 0;
+            this.listaProductos();
+            this.mensaje = "";
+            this.mensajeRegistro = "Se Elimino satisfactoriamente";
+          }
+        })
+        .catch((error) => {
+          this.mensajeRegistro = "";
+          this.mensaje = error.response.status + ": " + error.message;
+        });
       this.closeDelete();
     },
 
     close() {
       this.dialog = false;
-  
     },
 
     closeDelete() {
       this.dialogDelete = false;
-
     },
-
   },
   filters: {
     decimalNumer(value) {

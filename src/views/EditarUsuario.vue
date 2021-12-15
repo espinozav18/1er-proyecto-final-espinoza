@@ -1,7 +1,6 @@
 <template>
     <EditarUsuario />
 </template>
-
 <script>
 import EditarUsuario from "../components/EditarUsuario.vue"
     export default {
